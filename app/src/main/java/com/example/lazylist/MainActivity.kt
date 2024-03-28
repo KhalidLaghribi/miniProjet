@@ -110,6 +110,7 @@ fun ListOfPlates(
     checkedPlates: SnapshotStateList<Plate>,
     navController: NavController
 ) {
+    val context = LocalContext.current
     Column(modifier = Modifier.fillMaxSize()) {
         LazyColumn(modifier = Modifier.weight(1f)) {
             items(items = plates) { plate ->
@@ -128,7 +129,11 @@ fun ListOfPlates(
         }
         Button(
             onClick = {
-                navController.navigate("checkout")
+                if (checkedPlates.any { it.isChecked.value }) {
+                    navController.navigate("checkout")
+                } else {
+                    Toast.makeText(context, "Please select at least one item", Toast.LENGTH_SHORT).show()
+                }
             },
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
@@ -137,20 +142,27 @@ fun ListOfPlates(
             Text(text = "Checkout")
         }
     }
+
+}
+
+fun calculateTotal(filteredPlates: List<Plate>): Double {
+    return filteredPlates.sumOf { it.price }
+}
+fun generateEmailBody(filteredPlates: List<Plate>): String {
+    val items = filteredPlates.joinToString("\n") {
+        "- ${it.name} - ${it.price} DH"
+    }
+    return "Your order:\n$items\n\nTotal: ${"%.2f".format(calculateTotal(filteredPlates))} DH"
 }
 
 
 
 @Composable
 fun CheckoutScreen(checkedPlates: List<Plate>) {
-    val subjectState = remember { mutableStateOf("") }
-    val emailState = remember { mutableStateOf("") }
-    val contentState = remember { mutableStateOf("") }
-    val buttonText = remember { mutableStateOf("") }
     val ctx = LocalContext.current
     val senderEmail = "admin@restaurant.com"
     val emailSubject = "Order Confirmation"
-    val emailBody = "Test\n1\n2\n3"
+    val emailBody = generateEmailBody(checkedPlates)
     var total: Double = 0.00
     for (plate in checkedPlates) {
         total += plate.price
@@ -177,7 +189,7 @@ fun CheckoutScreen(checkedPlates: List<Plate>) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = "Total: $${"%.2f".format(total)}", fontWeight = FontWeight.Bold)
+            Text(text = "Total: ${"%.2f".format(total)} DH", fontWeight = FontWeight.Bold)
             val context = LocalContext.current
             Button(
                 onClick = {
@@ -220,7 +232,7 @@ fun PlateRow(plate: Plate) {
     ) {
         Text(text = plate.name)
         Spacer(modifier = Modifier.width(10.dp))
-        Text(text = "$${plate.price}")
+        Text(text = "${plate.price} DH")
     }
 }
 
@@ -261,11 +273,11 @@ fun PlateCard(plate: Plate, onPlateCheckedChange: (Boolean) -> Unit) {
                 style = MaterialTheme.typography.bodyMedium
             )
             Text(
-                text = "Price: ${plate.price}",
+                text = "Price: ${plate.price} DH",
                 style = MaterialTheme.typography.bodySmall
             )
             Text(
-                text = "Rating: ${plate.rating}",
+                text = "Rating: ${plate.rating} out of 5",
                 style = MaterialTheme.typography.bodySmall
             )
             Spacer(modifier = Modifier.height(10.dp))
@@ -301,16 +313,13 @@ data class Plate(
 
 fun loadPlates(): List<Plate> {
     return listOf(
-        Plate("Platee 1", R.drawable.plate1, "Category 1", "Description for Platee 1", 9.99, 4.5),
-        Plate("Platee 2", R.drawable.plate1, "Category 2", "Description for Platee 2",  12.99, 4.0),
-        Plate("Platee 3", R.drawable.plate1, "Category 3", "Description for Platee 3",  8.50, 3.8),
-        Plate("Platee 4", R.drawable.plate1, "Category 4", "Description for Platee 4",  15.75, 4.2),
-        Plate("Platee 5", R.drawable.plate1, "Category 5", "Description for Platee 5",  11.25, 4.7),
-        Plate("Platee 6", R.drawable.plate1, "Category 6", "Description for Platee 6", 10.00, 4.3),
-        Plate("Platee 7", R.drawable.plate1, "Category 7", "Description for Platee 7",  14.50, 4.8),
-        Plate("Platee 8", R.drawable.plate1, "Category 8", "Description for Platee 8",  13.20, 4.6),
-        Plate("Platee 9", R.drawable.plate1, "Category 9", "Description for Platee 9",  16.99, 4.9),
-        Plate("Platee 10", R.drawable.plate1, "Category 10", "Description for Platee 10",  18.50, 4.4)
+        Plate("Tagine", R.drawable.tagine, "Main course", "Best tagine that you'll ever have!",  84.99, 4.9),
+        Plate("Couscous", R.drawable.couscous, "Main course", "Only available on Fridays.",  49.99, 1.3),
+        Plate("Salade Niçoise", R.drawable.salad, "Salad", "Traditionally made of tomatoes, hard-boiled eggs, Niçoise olives and anchovies or tuna, dressed with olive oil.",  32.99, 4.2),
+        Plate("Atay", R.drawable.atay, "Drink", "Atay bn3na3.",  12.99, 4.8),
+        Plate("Pizza", R.drawable.pizza, "Main course", "Italian made pizza.", 79.99, 4.5),
+        Plate("Burger", R.drawable.burger, "Main course", "Salty, buttery, and slightly sharp, Comté cheese crisps similarly to Parmesan, adding an irresistibly crunchy frico layer to these cheeseburgers.",  52.49, 4.1),
+        Plate("Sprite 33cl", R.drawable.soda, "Drink", "Sprite!", 9.99, 4.8)
     )
 }
 
