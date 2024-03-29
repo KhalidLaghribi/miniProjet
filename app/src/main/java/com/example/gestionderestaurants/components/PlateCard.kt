@@ -56,16 +56,16 @@ fun PlateCard(plate: Plate, onPlateCheckedChange: (Boolean) -> Unit) {
                 )
             }
             Spacer(modifier = Modifier.height(10.dp))
-            Box( // Use a Box to control aspect ratio
+            Box( 
                 modifier = Modifier
-                    .fillMaxSize() // Make the Box fill the available space
-                    .aspectRatio(1f) // Set aspect ratio to 1:1 (square)
+                    .fillMaxSize() 
+                    .aspectRatio(1f) 
             ) {
                 Image(
                     painter = painterResource(id = plate.image),
                     contentDescription = plate.name,
-                    modifier = Modifier.fillMaxSize()// Make the image fill the Box
-                        .clip(RoundedCornerShape(10.dp)), // Apply rounded corners
+                    modifier = Modifier.fillMaxSize()
+                        .clip(RoundedCornerShape(10.dp)), 
                     contentScale = ContentScale.Crop
 
                 )

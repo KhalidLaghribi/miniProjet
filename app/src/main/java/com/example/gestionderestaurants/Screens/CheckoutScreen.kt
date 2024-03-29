@@ -49,9 +49,7 @@ fun CheckoutScreen(checkedPlates: List<Plate>) {
         total += plate.price
     }
 
-    // Use BackHandler to intercept the back press event
     BackHandler(onBack = {
-        // Perform your custom action here, e.g., navigate back
         navController.popBackStack()
     })
 
@@ -65,17 +63,16 @@ fun CheckoutScreen(checkedPlates: List<Plate>) {
             title = { Text("Checkout") },
             navigationIcon = {
                 IconButton(onClick = {
-                    // Optionally, you can also handle the click event here
                     navController.navigate("homeScreen")
                 }) {
                     Icon(Icons.Filled.ArrowBack, contentDescription = "Back to home")
                 }
             },
             colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = Color.LightGray, // Light background color for the TopAppBar
-                titleContentColor = Color.Black, // Text color for the title
-                navigationIconContentColor = Color.Black, // Icon color for navigation icons
-                actionIconContentColor = Color.Black // Icon color for action icons
+                containerColor = Color.LightGray, 
+                titleContentColor = Color.Black, 
+                navigationIconContentColor = Color.Black,
+                actionIconContentColor = Color.Black 
             )
         )
         LazyColumn(
@@ -98,7 +95,7 @@ fun CheckoutScreen(checkedPlates: List<Plate>) {
             Button(
                 onClick = {
                     val intent = Intent(Intent.ACTION_SENDTO).apply {
-                        data = Uri.parse("mailto:") // This ensures only email apps can handle the intent
+                        data = Uri.parse("mailto:") 
                         putExtra(Intent.EXTRA_EMAIL, arrayOf(senderEmail))
                         putExtra(Intent.EXTRA_SUBJECT, emailSubject)
                         putExtra(Intent.EXTRA_TEXT, emailBody)
