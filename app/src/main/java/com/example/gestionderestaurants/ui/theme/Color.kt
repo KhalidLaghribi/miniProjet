@@ -1,4 +1,4 @@
-package com.example.lazylist.ui.theme
+package com.example.gestionderestaurants.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

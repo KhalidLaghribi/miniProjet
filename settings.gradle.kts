@@ -13,6 +13,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Lazy List"
+rootProject.name = "Gestion de Restaurants"
 include(":app")
  

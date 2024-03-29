@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.lazylist"
+    namespace = "com.example.gestionderestaurants"
     compileSdk = 34
 
     defaultConfig {

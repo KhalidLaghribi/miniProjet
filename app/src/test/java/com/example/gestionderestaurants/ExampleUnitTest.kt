@@ -1,4 +1,4 @@
-package com.example.lazylist
+package com.example.gestionderestaurants
 
 import org.junit.Test
 

@@ -1,4 +1,4 @@
-package com.example.lazylist.ui.theme
+package com.example.gestionderestaurants.ui.theme
 
 import android.app.Activity
 import android.os.Build
